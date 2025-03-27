@@ -1,4 +1,4 @@
-# render.yaml
+# render.yaml - Includes debugging command 'ls -la'
 
 services:
   - type: web
@@ -10,8 +10,12 @@ services:
     # Tells Render to change to the 'backend' directory first
     rootDir: backend            
 
-    # Command to install dependencies - ASSUMES backend/requirements.txt exists
-    buildCommand: pip install -r requirements.txt  # <-- CHANGED from 'pip install -e .'
+    # Command to install dependencies AND list directory contents for debugging
+    # ASSUMES backend/requirements.txt exists
+    buildCommand: |
+      pip install -r requirements.txt
+      echo "--- Listing backend directory contents during build ---"
+      ls -la                  # <-- DEBUGGING: List files in the 'backend' dir
     
     # Command to start the web server using Gunicorn
     # Looks for 'app' object in 'backend/src/app.py'
