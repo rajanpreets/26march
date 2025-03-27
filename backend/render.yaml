@@ -1,25 +1,39 @@
+# render.yaml
+
 services:
   - type: web
-    name: 26march
-    env: python
-    region: oregon
-    plan: free
-    buildCommand: pip install -e .
-    startCommand: gunicorn src.app:app
-    autoDeploy: true
-    rootDir: backend
-    branch: backend
-    healthCheckPath: /health
+    name: 26march                # Your service name
+    env: python                  # Environment is Python
+    region: oregon               # Deployment region
+    plan: free                   # Render plan
+    
+    # Tells Render to change to the 'backend' directory first
+    rootDir: backend            
+
+    # Command to install dependencies - ASSUMES backend/requirements.txt exists
+    buildCommand: pip install -r requirements.txt  # <-- CHANGED from 'pip install -e .'
+    
+    # Command to start the web server using Gunicorn
+    # Looks for 'app' object in 'backend/src/app.py'
+    startCommand: gunicorn src.app:app 
+    
+    autoDeploy: true             # Automatically deploy on push to the specified branch
+    
+    # Deploy ONLY from this branch - MAKE SURE THIS IS YOUR INTENDED BRANCH
+    branch: backend              # <-- Verify this is the branch you are pushing to! 
+    
+    healthCheckPath: /health     # Optional: Endpoint for Render health checks
+    
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.11
+        value: 3.11              # Using 3.11 often suffices, Render picks a recent patch.
       - key: GROQ_API_KEY
-        sync: false
+        sync: false              # Keep API keys out of version control
       - key: SERPER_API_KEY
-        sync: false
+        sync: false              # Keep API keys out of version control
       - key: ALLOWED_ORIGINS
-        value: "https://two6march-1.onrender.com,http://localhost:3000"
+        value: "https://two6march-1.onrender.com,http://localhost:3000" # Example CORS origins
       - key: DEBUG
-        value: "False"
+        value: "False"           # Disable debug mode in production
       - key: PORT
-        value: "10000"
+        value: "10000"           # Render will inject the PORT Gunicorn should bind to
