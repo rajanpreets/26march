@@ -1,9 +1,15 @@
 services:
   - type: web
-    name: backend
+    name: 26march
     env: python
-    buildCommand: pip install -r requirements.txt
+    region: oregon
+    plan: free
+    buildCommand: cd backend && pip install -r requirements.txt
     startCommand: gunicorn src.app:app
+    autoDeploy: true
+    rootDir: backend
+    branch: backend
+    healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.11
@@ -12,6 +18,8 @@ services:
       - key: SERPER_API_KEY
         sync: false
       - key: ALLOWED_ORIGINS
-        value: "*"
+        value: "https://two6march.onrender.com,http://localhost:3000"
       - key: DEBUG
-        value: "False" 
+        value: "False"
+      - key: PORT
+        value: "10000" 
