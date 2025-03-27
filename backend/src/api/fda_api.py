@@ -2,13 +2,14 @@ import requests
 import pandas as pd
 from typing import Dict, Any, List
 import logging
+from ..config import FDA_API_KEY, FDA_BASE_URL
 
 logger = logging.getLogger(__name__)
 
 class OpenFDA:
     def __init__(self):
-        self.base_url = "https://api.fda.gov"
-        self.api_key = "YOUR_FDA_API_KEY"  # Replace with actual API key
+        self.base_url = FDA_BASE_URL
+        self.api_key = FDA_API_KEY
 
     def open_fda_main(self, query: str, search_type: str = 'drug') -> Dict[str, Any]:
         """
@@ -22,6 +23,10 @@ class OpenFDA:
             Dict[str, Any]: Processed FDA data
         """
         try:
+            if not self.api_key:
+                logger.warning("No FDA API key provided. Skipping FDA data fetch.")
+                return {"data": [], "error": "FDA API key not configured"}
+                
             if search_type == 'drug':
                 return self._search_drug(query)
             else:
