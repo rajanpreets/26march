@@ -4,7 +4,7 @@ services:
     env: python
     region: oregon
     plan: free
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install -r src/requirements.txt
     startCommand: gunicorn src.app:app
     autoDeploy: true
     rootDir: backend
@@ -18,7 +18,7 @@ services:
       - key: SERPER_API_KEY
         sync: false
       - key: ALLOWED_ORIGINS
-        value: "https://two6march.onrender.com,http://localhost:3000"
+        value: "https://two6march-1.onrender.com,http://localhost:3000"
       - key: DEBUG
         value: "False"
       - key: PORT
