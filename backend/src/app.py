@@ -7,8 +7,9 @@ from groq import Groq
 from pydantic import BaseModel, Field
 from typing import Dict, Any, List, Literal
 from datetime import datetime
+import os
 
-from src.config import (
+from .config import (
     GROQ_API_KEY,
     GROQ_MODEL,
     TEMPERATURE,
@@ -17,7 +18,7 @@ from src.config import (
     LOG_LEVEL,
     LOG_FORMAT
 )
-from src.utils.graph_nodes import (
+from .utils.graph_nodes import (
     create_fda_node,
     create_clinical_trials_node,
     create_ncbi_node,
@@ -123,4 +124,5 @@ def health_check():
     })
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000) 
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
